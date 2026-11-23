@@ -1,0 +1,25 @@
+databases:
+  - name: kci-postgres
+    databaseName: kci
+    user: kci
+    plan: free
+    region: frankfurt
+
+services:
+  - type: web
+    name: kano-constituency-intelligence
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn --workers 2 --threads 4 --timeout 90 --bind 0.0.0.0:$PORT app:app
+    healthCheckPath: /
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: kci-postgres
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
