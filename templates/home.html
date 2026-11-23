@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block title %}KCI | Local Knowledge. Reliable Data.{% endblock %}
+{% block content %}
+<section class="hero row align-items-center g-4 py-5">
+ <div class="col-lg-7"><div class="eyebrow">KANO CONSTITUENCY INTELLIGENCE</div><h1>Local knowledge.<br><span>Reliable data.</span></h1>
+ <p class="lead mt-3">A field research and data intelligence workspace for capturing community observations, checking evidence, identifying trends and producing clear analytical reports.</p>
+ <div class="d-flex flex-wrap gap-2 mt-4"><a class="btn btn-primary btn-lg" href="{{ url_for('login') }}">Open analyst workspace</a><a class="btn btn-outline-secondary btn-lg" href="#workflow">Explore the workflow</a></div>
+ <div class="hero-note mt-4">Built to demonstrate constituency-level research, data quality and analytical reporting.</div></div>
+ <div class="col-lg-5"><div class="hero-panel"><div class="d-flex justify-content-between"><span class="eyebrow">INTELLIGENCE WORKFLOW</span><span class="live-dot">● DEMO</span></div>
+ {% for n,t,d in [('01','Collect','Capture structured ward-level observations'),('02','Verify','Review evidence and source reliability'),('03','Analyse','Compare categories, locations and trends'),('04','Report','Turn findings into concise briefs')] %}
+ <div class="workflow-row"><div class="workflow-num">{{ n }}</div><div><b>{{ t }}</b><small>{{ d }}</small></div></div>{% endfor %}
+ </div></div>
+</section>
+<section id="workflow" class="row g-3 pb-5">{% for title,desc in [('Field research','Capture local observations with source attribution.'),('Evidence verification','Track pending, verified and rejected records.'),('Data analysis','Compare issues across LGAs, wards and categories.'),('Clear reporting','Export structured records for further analysis.')] %}
+<div class="col-md-6 col-xl-3"><div class="feature-card h-100"><div class="feature-icon">↗</div><h3>{{ title }}</h3><p>{{ desc }}</p></div></div>{% endfor %}</section>
+{% endblock %}
