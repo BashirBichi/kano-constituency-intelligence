@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block title %}Dashboard | KCI{% endblock %}
+{% block head %}<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>{% endblock %}
+{% block content %}
+<div class="page-heading d-flex flex-wrap align-items-end justify-content-between gap-3"><div><div class="eyebrow">OVERVIEW / KANO STATE</div><h1>Intelligence dashboard</h1><p>Monitor incoming observations, verification progress and reported community issues.</p></div><a class="btn btn-primary" href="{{ url_for('new_observation') }}">＋ Submit observation</a></div>
+<div class="row g-3 mb-4">
+{% for label,value,sub in [('Total observations',total,'All submitted records'),('Verified records',verified,'Evidence reviewed'),('Pending review',pending,'Awaiting verification'),('Rejected records',rejected,'Not accepted as verified')] %}
+<div class="col-6 col-xl-3"><div class="metric-card"><div class="metric-label">{{ label }}</div><div class="metric-value">{{ value }}</div><div class="metric-sub">{{ sub }}</div></div></div>{% endfor %}
+</div>
+<div class="row g-3 mb-4"><div class="col-xl-7"><div class="panel h-100"><div class="panel-heading"><div><h3>Observations by category</h3><p>Distribution of recorded community issues</p></div></div><div class="chart-wrap"><canvas id="categoryChart"></canvas></div></div></div>
+<div class="col-xl-5"><div class="panel h-100"><div class="panel-heading"><div><h3>Records by LGA</h3><p>Locations with the most submitted observations</p></div></div><div class="chart-wrap"><canvas id="lgaChart"></canvas></div></div></div></div>
+<div class="panel"><div class="panel-heading"><div><h3>Recent observations</h3><p>Latest field and community submissions</p></div><a href="{{ url_for('observations') }}">View all →</a></div>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>Observation</th><th>Category</th><th>Location</th><th>Observed</th><th>Status</th></tr></thead><tbody>
+{% for item in recent %}<tr><td class="fw-semibold">{{ item.title }}</td><td>{{ item.category }}</td><td>{{ item.lga }} · {{ item.ward }}</td><td>{{ item.observed_on.strftime('%d %b %Y') }}</td><td><span class="status status-{{ item.status }}">{{ item.status|title }}</span></td></tr>
+{% else %}<tr><td colspan="5" class="text-center text-muted py-4">No observations yet. Submit the first field record.</td></tr>{% endfor %}
+</tbody></table></div></div>
+<div class="demo-warning mt-3">Demonstration workspace: all sample records are illustrative and must not be cited as verified real-world constituency findings.</div>
+{% endblock %}
+{% block scripts %}<script>
+const labels={{ category_labels|tojson }}, values={{ category_values|tojson }};
+const lgaLabels={{ lga_labels|tojson }}, lgaValues={{ lga_values|tojson }};
+const baseOpts={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}}};
+new Chart(document.getElementById('categoryChart'),{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:'#2476ad',borderRadius:6}]},options:{...baseOpts,scales:{y:{beginAtZero:true,ticks:{precision:0}},x:{grid:{display:false}}}}});
+new Chart(document.getElementById('lgaChart'),{type:'bar',data:{labels:lgaLabels,datasets:[{data:lgaValues,backgroundColor:'#5a9b82',borderRadius:6}]},options:{...baseOpts,indexAxis:'y',scales:{x:{beginAtZero:true,ticks:{precision:0}},y:{grid:{display:false}}}}});
+</script>{% endblock %}
