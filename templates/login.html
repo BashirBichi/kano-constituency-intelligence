@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}Sign in | KCI{% endblock %}
+{% block content %}<div class="auth-wrap"><div class="auth-card"><div class="eyebrow">SECURE WORKSPACE</div><h2>Analyst sign in</h2><p class="text-muted">Access field records, verification and constituency analytics.</p>
+<form method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label class="form-label mt-3">Email address</label><input class="form-control form-control-lg" type="email" name="email" required autocomplete="username">
+<label class="form-label mt-3">Password</label><input class="form-control form-control-lg" type="password" name="password" required autocomplete="current-password">
+<button class="btn btn-primary btn-lg w-100 mt-4">Sign in</button></form>
+<div class="small text-muted mt-3">Demo credentials are configured by the project operator. Do not use sample credentials for production.</div></div></div>{% endblock %}
